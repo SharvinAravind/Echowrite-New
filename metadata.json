@@ -1,0 +1,7 @@
+{
+  "name": "EchoWrite new",
+  "description": "Professional voice-to-text platform with premium intelligence and visual logic tools.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
