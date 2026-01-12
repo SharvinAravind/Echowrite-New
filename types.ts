@@ -15,7 +15,48 @@ export enum WritingStyle {
   BLOG_DRAFT = 'Blog Draft'
 }
 
-export type AppTheme = 'creamy' | 'pure' | 'minimal' | 'gold-luxe' | 'midnight-pro' | 'frost-glass';
+export enum Tone {
+  APPRECIATIVE = 'Appreciative',
+  WARM = 'Warm',
+  PROFESSIONAL = 'Professional',
+  RESPECTFUL = 'Respectful',
+  MARKETING = 'Marketing',
+  ELABORATE = 'Elaborate'
+}
+
+export enum Length {
+  SIMPLE = 'Simple',
+  MEDIUM = 'Medium',
+  LONG = 'Long'
+}
+
+export type AppTheme = 'neu-default' | 'neu-dark' | 'warm-cream' | 'cool-blue' | 'mint-fresh' | 'rose-gold' | 'arctic-white' | 'midnight-pro';
+
+export interface ToneConfig {
+  id: Tone;
+  name: string;
+  description: string;
+  premium: boolean;
+}
+
+export interface LengthConfig {
+  id: Length;
+  name: string;
+  wordRange: string;
+  premium: boolean;
+}
+
+export interface UsageStats {
+  [date: string]: number;
+}
+
+export interface UserPreferences {
+  theme: AppTheme;
+  noiseCancellation: boolean;
+  accentColor: string;
+  snowfallEffect: boolean;
+  autoLanguageDetect: boolean;
+}
 
 export interface User {
   id: string;
@@ -53,7 +94,9 @@ export interface WritingVariation {
   id: string;
   label: string;
   suggestedText: string;
-  tone: string;
+  tone: Tone;
+  length: Length;
+  wordCount: number;
   changes: { field: string; reason: string }[];
   analysis?: {
     sentiment: string;
@@ -65,7 +108,9 @@ export interface HistoryItem {
   id: string;
   timestamp: number;
   originalText: string;
-  style: WritingStyle;
+  style?: WritingStyle;
+  tone?: Tone;
+  length?: Length;
   variations: WritingVariation[];
   visuals: string[];
   tags?: string[];
@@ -90,4 +135,30 @@ export const SUPPORTED_LANGUAGES = [
   { code: 'ko-KR', name: 'Korean' },
   { code: 'ar-SA', name: 'Arabic' },
   { code: 'hi-IN', name: 'Hindi' }
+];
+
+export const TONE_CONFIGS: ToneConfig[] = [
+  { id: Tone.APPRECIATIVE, name: 'Appreciative', description: 'Grateful and thankful', premium: false },
+  { id: Tone.WARM, name: 'Warm', description: 'Friendly and empathetic', premium: false },
+  { id: Tone.PROFESSIONAL, name: 'Professional', description: 'Formal and polished', premium: false },
+  { id: Tone.RESPECTFUL, name: 'Respectful', description: 'Courteous and diplomatic', premium: false },
+  { id: Tone.MARKETING, name: 'Marketing', description: 'Persuasive and engaging', premium: true },
+  { id: Tone.ELABORATE, name: 'Elaborate', description: 'Detailed and comprehensive', premium: true }
+];
+
+export const LENGTH_CONFIGS: LengthConfig[] = [
+  { id: Length.SIMPLE, name: 'Simple', wordRange: '20-40 words', premium: false },
+  { id: Length.MEDIUM, name: 'Medium', wordRange: '60-100 words', premium: false },
+  { id: Length.LONG, name: 'Long', wordRange: '150-250 words', premium: true }
+];
+
+export const THEME_CONFIGS = [
+  { id: 'neu-default', name: 'Default Neumorphic', bg: '#eef1f6', surface: '#ffffff', shadow: '#ced4e1' },
+  { id: 'neu-dark', name: 'Dark Neumorphic', bg: '#2d3748', surface: '#1a202c', shadow: '#1a1a1a' },
+  { id: 'warm-cream', name: 'Warm Cream', bg: '#f5f5dc', surface: '#fffef0', shadow: '#e0dfc8' },
+  { id: 'cool-blue', name: 'Cool Blue', bg: '#e3f2fd', surface: '#f5fbff', shadow: '#c5e1f5' },
+  { id: 'mint-fresh', name: 'Mint Fresh', bg: '#e0f2f1', surface: '#f0fffe', shadow: '#c2dedd' },
+  { id: 'rose-gold', name: 'Rose Gold', bg: '#ffe4e1', surface: '#fff9f8', shadow: '#e8d0cd' },
+  { id: 'arctic-white', name: 'Arctic White', bg: '#ffffff', surface: '#ffffff', shadow: '#e0e0e0' },
+  { id: 'midnight-pro', name: 'Midnight Pro', bg: '#1a202c', surface: '#2d3748', shadow: '#0d1117' }
 ];

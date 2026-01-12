@@ -11,6 +11,7 @@ export const Auth: React.FC<AuthProps> = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
+  const [selectedTier, setSelectedTier] = useState<'free' | 'premium'>('free');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,7 +19,7 @@ export const Auth: React.FC<AuthProps> = ({ onLogin }) => {
       id: '1',
       email,
       name: fullName || email.split('@')[0],
-      tier: 'premium' // Releasing premium access as requested
+      tier: selectedTier
     });
   };
 
@@ -146,8 +147,8 @@ export const Auth: React.FC<AuthProps> = ({ onLogin }) => {
               <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
                 <Lock className="w-4 h-4" />
               </div>
-              <input 
-                type="password" 
+              <input
+                type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
@@ -156,8 +157,40 @@ export const Auth: React.FC<AuthProps> = ({ onLogin }) => {
               />
             </div>
 
-            <button 
-              type="submit" 
+            {mode === 'signup' && (
+              <div className="space-y-3">
+                <label className="text-xs font-bold text-slate-600 uppercase tracking-widest">Choose Your Plan</label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedTier('free')}
+                    className={`p-4 rounded-xl border-2 transition-all text-left ${
+                      selectedTier === 'free'
+                        ? 'border-[#b05c6d] bg-[#b05c6d]/5'
+                        : 'border-slate-200 hover:border-slate-300'
+                    }`}
+                  >
+                    <p className="text-xs font-bold text-slate-800 mb-1">Free</p>
+                    <p className="text-[9px] text-slate-500">10 generations/day</p>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedTier('premium')}
+                    className={`p-4 rounded-xl border-2 transition-all text-left ${
+                      selectedTier === 'premium'
+                        ? 'border-amber-500 bg-amber-50'
+                        : 'border-slate-200 hover:border-slate-300'
+                    }`}
+                  >
+                    <p className="text-xs font-bold text-slate-800 mb-1">Premium</p>
+                    <p className="text-[9px] text-slate-500">Unlimited access</p>
+                  </button>
+                </div>
+              </div>
+            )}
+
+            <button
+              type="submit"
               className="w-full bg-gradient-to-r from-[#b05c6d] to-[#6d5cb0] text-white py-4 rounded-xl font-bold text-sm shadow-xl shadow-[#b05c6d]/20 hover:scale-[1.01] active:scale-95 transition-all mt-4"
             >
               {mode === 'signup' ? 'Get Started' : 'Log In'}
