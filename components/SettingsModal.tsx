@@ -114,51 +114,123 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ user, isOpen, onCl
               </div>
             )}
 
+            {activeTab === 'voice' && (
+              <div className="space-y-6 animate-in fade-in">
+                <div>
+                  <p className="text-[11px] font-black text-slate-400 uppercase mb-4 tracking-widest">Voice Settings</p>
+                  <div className="space-y-3">
+                    <label className="flex items-center justify-between p-4 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer hover:bg-white transition-all">
+                      <div>
+                        <span className="text-sm font-bold text-slate-700 block">Noise Cancellation</span>
+                        <span className="text-xs text-slate-500">Reduce background noise</span>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={user.settings?.voice?.noiseCancellation || false}
+                        onChange={(e) => {
+                          const updatedUser = { ...user, settings: { ...user.settings, voice: { ...user.settings?.voice, noiseCancellation: e.target.checked } } };
+                          localStorage.setItem('v2t_user', JSON.stringify(updatedUser));
+                        }}
+                        className="w-5 h-5 rounded"
+                      />
+                    </label>
+                    <label className="flex items-center justify-between p-4 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer hover:bg-white transition-all">
+                      <div>
+                        <span className="text-sm font-bold text-slate-700 block">Auto Punctuation</span>
+                        <span className="text-xs text-slate-500">Automatically add punctuation</span>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={user.settings?.voice?.autoPunctuation || false}
+                        onChange={(e) => {
+                          const updatedUser = { ...user, settings: { ...user.settings, voice: { ...user.settings?.voice, autoPunctuation: e.target.checked } } };
+                          localStorage.setItem('v2t_user', JSON.stringify(updatedUser));
+                        }}
+                        className="w-5 h-5 rounded"
+                      />
+                    </label>
+                    <label className="flex items-center justify-between p-4 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer hover:bg-white transition-all">
+                      <div>
+                        <span className="text-sm font-bold text-slate-700 block">Auto Detect Language</span>
+                        <span className="text-xs text-slate-500">Automatically detect spoken language</span>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={user.settings?.voice?.autoDetectLang || false}
+                        onChange={(e) => {
+                          const updatedUser = { ...user, settings: { ...user.settings, voice: { ...user.settings?.voice, autoDetectLang: e.target.checked } } };
+                          localStorage.setItem('v2t_user', JSON.stringify(updatedUser));
+                        }}
+                        className="w-5 h-5 rounded"
+                      />
+                    </label>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {activeTab === 'plans' && (
               <div className="space-y-8 animate-in fade-in">
                 <div className="text-center mb-8">
                   <h4 className="text-2xl font-black text-slate-800">Select Your Power</h4>
-                  <p className="text-sm text-slate-500 mt-2">All premium features are unlocked for you.</p>
+                  <p className="text-sm text-slate-500 mt-2">{user.tier === 'premium' ? 'You have Premium access!' : 'Upgrade to unlock all features.'}</p>
                 </div>
                 
-                <div className="grid grid-cols-2 gap-6">
-                  {/* Pro Option */}
-                  <button 
-                    onClick={() => setSelectedPlan('pro')}
-                    className={`p-8 rounded-[2.5rem] border-2 transition-all text-left relative overflow-hidden ${
-                      selectedPlan === 'pro' ? 'border-[#b05c6d] bg-[#b05c6d]/5 shadow-xl scale-105' : 'border-slate-100 bg-white hover:border-slate-200'
-                    }`}
-                  >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Free Option */}
+                  <div className={`p-8 rounded-[2.5rem] border-2 transition-all text-left relative overflow-hidden ${
+                    user.tier === 'free' ? 'border-blue-400 bg-blue-400/5 shadow-xl scale-105' : 'border-slate-100 bg-white'
+                  }`}>
                     <div className="flex justify-between items-center mb-4">
-                       <Star className={`w-8 h-8 ${selectedPlan === 'pro' ? 'text-[#b05c6d]' : 'text-slate-200'}`} />
-                       <span className="text-[10px] font-black bg-slate-100 px-3 py-1 rounded-full uppercase text-slate-400 tracking-widest">$9/mo</span>
+                       <Zap className={`w-8 h-8 ${user.tier === 'free' ? 'text-blue-500' : 'text-slate-200'}`} />
+                       <span className="text-[10px] font-black bg-blue-100 px-3 py-1 rounded-full uppercase text-blue-600 tracking-widest">FREE</span>
                     </div>
-                    <h5 className="text-xl font-black text-slate-800 mb-2">Echo Pro</h5>
-                    <ul className="text-[10px] font-bold text-slate-400 uppercase tracking-wider space-y-2">
-                      <li className="flex items-center gap-2"><Check className="w-3 h-3 text-green-500" /> High Accuracy</li>
-                      <li className="flex items-center gap-2"><Check className="w-3 h-3 text-green-500" /> Cloud Sync</li>
-                      <li className="flex items-center gap-2"><Check className="w-3 h-3 text-green-500" /> Ad-Free</li>
+                    <h5 className="text-xl font-black text-slate-800 mb-2">Free Tier</h5>
+                    <ul className="text-[10px] font-bold text-slate-400 uppercase tracking-wider space-y-2 mb-6">
+                      <li className="flex items-center gap-2"><Check className="w-3 h-3 text-green-500" /> 10 Generations/Month</li>
+                      <li className="flex items-center gap-2"><Check className="w-3 h-3 text-green-500" /> Basic Tones</li>
+                      <li className="flex items-center gap-2"><Check className="w-3 h-3 text-green-500" /> Standard Themes</li>
                     </ul>
-                  </button>
+                    {user.tier === 'free' && (
+                      <div className="text-center py-3 bg-blue-50 rounded-xl">
+                        <p className="text-xs font-black text-blue-600 uppercase">Current Plan</p>
+                      </div>
+                    )}
+                  </div>
 
                   {/* Premium Option */}
-                  <button 
-                    onClick={() => setSelectedPlan('premium')}
-                    className={`p-8 rounded-[2.5rem] border-2 transition-all text-left relative overflow-hidden ${
-                      selectedPlan === 'premium' ? 'border-amber-400 bg-amber-400/5 shadow-xl scale-105' : 'border-slate-100 bg-white hover:border-slate-200'
-                    }`}
-                  >
+                  <div className={`p-8 rounded-[2.5rem] border-2 transition-all text-left relative overflow-hidden ${
+                    user.tier === 'premium' ? 'border-amber-400 bg-amber-400/5 shadow-xl scale-105' : 'border-slate-100 bg-white hover:border-amber-300'
+                  }`}>
                     <div className="flex justify-between items-center mb-4">
-                       <Crown className={`w-8 h-8 ${selectedPlan === 'premium' ? 'text-amber-500' : 'text-slate-200'}`} />
+                       <Crown className={`w-8 h-8 ${user.tier === 'premium' ? 'text-amber-500' : 'text-slate-200'}`} />
                        <span className="text-[10px] font-black bg-amber-100 px-3 py-1 rounded-full uppercase text-amber-600 tracking-widest">$19/mo</span>
                     </div>
-                    <h5 className="text-xl font-black text-slate-800 mb-2">Echo Premium</h5>
-                    <ul className="text-[10px] font-bold text-slate-400 uppercase tracking-wider space-y-2">
-                      <li className="flex items-center gap-2"><Check className="w-3 h-3 text-amber-500" /> Neural Insight</li>
+                    <h5 className="text-xl font-black text-slate-800 mb-2">Premium Tier</h5>
+                    <ul className="text-[10px] font-bold text-slate-400 uppercase tracking-wider space-y-2 mb-6">
+                      <li className="flex items-center gap-2"><Check className="w-3 h-3 text-amber-500" /> Unlimited Generations</li>
+                      <li className="flex items-center gap-2"><Check className="w-3 h-3 text-amber-500" /> All 6 Tone Categories</li>
                       <li className="flex items-center gap-2"><Check className="w-3 h-3 text-amber-500" /> 17+ Languages</li>
-                      <li className="flex items-center gap-2"><Check className="w-3 h-3 text-amber-500" /> 3D Visuals</li>
+                      <li className="flex items-center gap-2"><Check className="w-3 h-3 text-amber-500" /> Premium Themes</li>
+                      <li className="flex items-center gap-2"><Check className="w-3 h-3 text-amber-500" /> Advanced Features</li>
                     </ul>
-                  </button>
+                    {user.tier === 'premium' ? (
+                      <div className="text-center py-3 bg-amber-50 rounded-xl">
+                        <p className="text-xs font-black text-amber-600 uppercase">Current Plan</p>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          // Stripe integration placeholder
+                          alert('Redirecting to Stripe checkout...');
+                          // In production: window.location.href = 'https://checkout.stripe.com/...';
+                        }}
+                        className="w-full py-3 bg-gradient-to-r from-amber-400 to-amber-600 text-white rounded-xl font-black uppercase text-[10px] tracking-widest shadow-lg hover:scale-105 active:scale-95 transition-all"
+                      >
+                        Upgrade Now
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             )}
@@ -166,20 +238,66 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ user, isOpen, onCl
             {activeTab === 'personalization' && (
               <div className="space-y-10 animate-in fade-in">
                 <div>
-                  <p className="text-[11px] font-black text-slate-400 uppercase mb-6 tracking-widest">Workspace Appearance</p>
-                  <div className="grid grid-cols-2 gap-4">
-                    {['minimal', 'gold-luxe', 'midnight-pro', 'frost-glass'].map(t => (
+                  <p className="text-[11px] font-black text-slate-400 uppercase mb-6 tracking-widest">Workspace Themes</p>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {['minimal', 'gold-luxe', 'midnight-pro', 'frost-glass', 'creamy', 'pure', 'ocean-blue', 'sunset-orange'].map(t => (
                       <button 
                         key={t}
                         onClick={() => onThemeChange(t)}
-                        className={`p-6 rounded-[2rem] border transition-all text-left ${
-                          currentTheme === t ? 'border-[#b05c6d] bg-[#b05c6d]/5 shadow-md' : 'border-slate-100 bg-slate-50 hover:bg-white'
+                        className={`p-4 md:p-6 rounded-[2rem] border transition-all text-left shadow-sm hover:shadow-md active:shadow-inner ${
+                          currentTheme === t ? 'border-[#d4af37] bg-[#d4af37]/5 shadow-md scale-105' : 'border-slate-100 bg-slate-50 hover:bg-white'
                         }`}
                       >
-                        <p className="text-[11px] font-black uppercase text-slate-800">{t.replace('-', ' ')}</p>
-                        <div className="mt-2 w-full h-1 bg-slate-200 rounded-full" />
+                        <p className="text-[10px] md:text-[11px] font-black uppercase text-slate-800">{t.replace('-', ' ')}</p>
+                        <div className={`mt-2 w-full h-1 rounded-full ${
+                          t === 'gold-luxe' ? 'bg-gradient-to-r from-[#d4af37] to-[#b38728]' :
+                          t === 'minimal' ? 'bg-slate-300' :
+                          t === 'midnight-pro' ? 'bg-indigo-500' :
+                          t === 'frost-glass' ? 'bg-sky-300' :
+                          t === 'creamy' ? 'bg-amber-200' :
+                          t === 'pure' ? 'bg-blue-300' :
+                          t === 'ocean-blue' ? 'bg-blue-500' :
+                          'bg-orange-400'
+                        }`} />
                       </button>
                     ))}
+                  </div>
+                </div>
+
+                <div>
+                  <p className="text-[11px] font-black text-slate-400 uppercase mb-4 tracking-widest">Accent Color</p>
+                  <div className="flex gap-3 flex-wrap">
+                    {['#d4af37', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'].map(color => (
+                      <button
+                        key={color}
+                        className="w-12 h-12 rounded-xl border-2 border-slate-200 hover:scale-110 transition-all shadow-sm"
+                        style={{ backgroundColor: color }}
+                        onClick={() => {
+                          // Save accent color to settings
+                          const updatedUser = { ...user, settings: { ...user.settings, personalization: { ...user.settings?.personalization, accentColor: color } } };
+                          localStorage.setItem('v2t_user', JSON.stringify(updatedUser));
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <p className="text-[11px] font-black text-slate-400 uppercase mb-4 tracking-widest">Visual Effects</p>
+                  <div className="space-y-3">
+                    <label className="flex items-center justify-between p-4 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer hover:bg-white transition-all">
+                      <span className="text-sm font-bold text-slate-700">Snowfall Effect</span>
+                      <input
+                        type="checkbox"
+                        checked={user.settings?.personalization?.snowfallEffect || false}
+                        onChange={(e) => {
+                          const updatedUser = { ...user, settings: { ...user.settings, personalization: { ...user.settings?.personalization, snowfallEffect: e.target.checked } } };
+                          localStorage.setItem('v2t_user', JSON.stringify(updatedUser));
+                          window.location.reload(); // Reload to apply effect
+                        }}
+                        className="w-5 h-5 rounded"
+                      />
+                    </label>
                   </div>
                 </div>
               </div>

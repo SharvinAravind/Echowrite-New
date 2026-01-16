@@ -1,6 +1,6 @@
 
 import { GoogleGenAI, Type, Modality } from "@google/genai";
-import { WritingStyle } from "../types";
+import { WritingStyle, ToneCategory, LengthVariation } from "../types";
 
 const MODEL_PRO = 'gemini-3-pro-preview';
 const MODEL_FLASH = 'gemini-3-flash-preview';
@@ -113,6 +113,76 @@ export const rephraseText = async (text: string, lengthType: 'simple' | 'medium'
     contents: `${prompts[lengthType]}\n\nText: "${text}"`,
   });
   return response.text;
+};
+
+export const generateToneVariations = async (
+  text: string, 
+  tone: ToneCategory, 
+  targetLanguage: string = 'en'
+) => {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  
+  const toneInstructions = {
+    [ToneCategory.APPRECIATIVE]: "Express genuine gratitude and appreciation. Use warm, thankful language that acknowledges value and contribution.",
+    [ToneCategory.WARM]: "Convey friendliness and approachability. Use conversational, inviting language that feels personal and caring.",
+    [ToneCategory.PROFESSIONAL]: "Maintain formal business standards. Use clear, structured language appropriate for corporate communication.",
+    [ToneCategory.RESPECTFUL]: "Show high regard and consideration. Use polite, courteous language that honors the recipient.",
+    [ToneCategory.MARKETING]: "Create engaging, persuasive content. Use compelling language that highlights benefits and drives action.",
+    [ToneCategory.ELABORATE]: "Provide comprehensive, detailed explanations. Use rich descriptive language with supporting context and examples."
+  };
+
+  const lengthPrompts = {
+    [LengthVariation.SIMPLE]: "Generate a concise version: 1-2 sentences maximum. Be direct and to the point. Avoid repetition.",
+    [LengthVariation.MEDIUM]: "Generate a balanced version: 3-5 sentences. Provide context without being verbose. Ensure no repetition.",
+    [LengthVariation.LONG]: "Generate an elaborate version: Multiple paragraphs with detailed explanations, examples, and supporting points. Ensure rich content without repetition."
+  };
+
+  const variations = [];
+  
+  // Generate all three length variations for the tone
+  for (const lengthType of [LengthVariation.SIMPLE, LengthVariation.MEDIUM, LengthVariation.LONG]) {
+    const systemPrompt = `You are an elite AI writing assistant specializing in tone-based content generation.
+    
+Tone: ${tone}
+${toneInstructions[tone]}
+
+Length Requirement: ${lengthPrompts[lengthType]}
+
+CRITICAL: Each variation must be completely unique. Do NOT repeat phrases, sentences, or ideas from other variations. Each must stand alone as a distinct piece of content.
+
+Target Language: ${targetLanguage}
+
+Return ONLY the generated text, no explanations or metadata.`;
+
+    try {
+      const response = await ai.models.generateContent({
+        model: MODEL_FLASH,
+        contents: `Transform this text with the specified tone and length:\n\n"${text}"`,
+        config: {
+          systemInstruction: systemPrompt,
+          temperature: 0.8,
+        }
+      });
+      
+      variations.push({
+        id: `${tone}-${lengthType}-${Date.now()}-${Math.random()}`,
+        label: `${lengthType}`,
+        suggestedText: response.text.trim(),
+        tone: tone,
+        toneCategory: tone,
+        lengthVariation: lengthType,
+        changes: [],
+        analysis: {
+          sentiment: tone === ToneCategory.APPRECIATIVE || tone === ToneCategory.WARM ? 'Positive' : 'Neutral',
+          keywords: []
+        }
+      });
+    } catch (error) {
+      console.error(`Error generating ${lengthType} variation:`, error);
+    }
+  }
+
+  return { variations };
 };
 
 export const generateVisualContent = async (text: string, count: number = 3, editPrompt?: string) => {

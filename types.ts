@@ -15,13 +15,29 @@ export enum WritingStyle {
   BLOG_DRAFT = 'Blog Draft'
 }
 
-export type AppTheme = 'creamy' | 'pure' | 'minimal' | 'gold-luxe' | 'midnight-pro' | 'frost-glass';
+export enum ToneCategory {
+  APPRECIATIVE = 'Appreciative',
+  WARM = 'Warm',
+  PROFESSIONAL = 'Professional',
+  RESPECTFUL = 'Respectful',
+  MARKETING = 'Marketing',
+  ELABORATE = 'Elaborate'
+}
+
+export enum LengthVariation {
+  SIMPLE = 'SIMPLE',
+  MEDIUM = 'MEDIUM',
+  LONG = 'LONG'
+}
+
+export type AppTheme = 'creamy' | 'pure' | 'minimal' | 'gold-luxe' | 'midnight-pro' | 'frost-glass' | 'ocean-blue' | 'sunset-orange';
 
 export interface User {
   id: string;
   email: string;
   name: string;
   tier: 'free' | 'premium';
+  usageCount?: number;
   settings?: UserSettings;
 }
 
@@ -47,6 +63,11 @@ export interface UserSettings {
     autoSummarize: boolean;
     autoExportEmail: boolean;
   };
+  personalization: {
+    accentColor: string;
+    snowfallEffect: boolean;
+    theme: AppTheme;
+  };
 }
 
 export interface WritingVariation {
@@ -54,6 +75,8 @@ export interface WritingVariation {
   label: string;
   suggestedText: string;
   tone: string;
+  toneCategory?: ToneCategory;
+  lengthVariation?: LengthVariation;
   changes: { field: string; reason: string }[];
   analysis?: {
     sentiment: string;
