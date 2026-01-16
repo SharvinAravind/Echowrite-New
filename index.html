@@ -8,171 +8,15 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --neu-bg: #eef1f6;
-      --neu-surface: #ffffff;
-      --neu-shadow-dark: #ced4e1;
-      --neu-shadow-light: #ffffff;
-      --neu-text-primary: #2d3748;
-      --neu-text-secondary: #718096;
-      --neu-accent: #d4af37;
-      --neu-accent-hover: #c5a033;
-      --neu-border-radius: 20px;
-      --neu-border-radius-lg: 30px;
-      --neu-border-radius-xl: 40px;
-      --neu-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--neu-bg);
-      margin: 0;
-      overflow-x: hidden;
-      color: var(--neu-text-primary);
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    .neu-lifted {
-      background: var(--neu-surface);
-      box-shadow: 8px 8px 16px var(--neu-shadow-dark), -8px -8px 16px var(--neu-shadow-light);
-      border-radius: var(--neu-border-radius);
-      transition: var(--neu-transition);
-    }
-
-    .neu-pressed {
-      background: var(--neu-surface);
-      box-shadow: inset 4px 4px 8px var(--neu-shadow-dark), inset -4px -4px 8px var(--neu-shadow-light);
-      border-radius: var(--neu-border-radius);
-      transition: var(--neu-transition);
-    }
-
-    .neu-hover:hover {
-      box-shadow: 6px 6px 12px var(--neu-shadow-dark), -6px -6px 12px var(--neu-shadow-light);
-      transform: translateY(-2px);
-    }
-
-    .neu-hover:active {
-      box-shadow: inset 4px 4px 8px var(--neu-shadow-dark), inset -4px -4px 8px var(--neu-shadow-light);
-      transform: translateY(0);
-    }
-
-    .neu-input {
-      background: var(--neu-surface);
-      box-shadow: inset 2px 2px 5px var(--neu-shadow-dark), inset -2px -2px 5px var(--neu-shadow-light);
-      border-radius: var(--neu-border-radius);
-      border: none;
-      padding: 16px;
-      color: var(--neu-text-primary);
-      transition: var(--neu-transition);
-    }
-
-    .neu-input:focus {
-      outline: none;
-      box-shadow: inset 3px 3px 6px var(--neu-shadow-dark), inset -3px -3px 6px var(--neu-shadow-light), 0 0 0 2px var(--neu-accent);
-    }
-
-    .neu-button {
-      background: var(--neu-surface);
-      box-shadow: 6px 6px 12px var(--neu-shadow-dark), -6px -6px 12px var(--neu-shadow-light);
-      border-radius: var(--neu-border-radius);
-      border: none;
-      padding: 12px 24px;
-      color: var(--neu-text-primary);
-      cursor: pointer;
-      transition: var(--neu-transition);
-      font-weight: 600;
-    }
-
-    .neu-button:hover {
-      box-shadow: 4px 4px 8px var(--neu-shadow-dark), -4px -4px 8px var(--neu-shadow-light);
-      transform: translateY(-1px);
-    }
-
-    .neu-button:active {
-      box-shadow: inset 4px 4px 8px var(--neu-shadow-dark), inset -4px -4px 8px var(--neu-shadow-light);
-      transform: translateY(0);
-    }
-
-    .neu-button-accent {
-      background: linear-gradient(135deg, var(--neu-accent), var(--neu-accent-hover));
-      box-shadow: 6px 6px 12px var(--neu-shadow-dark), -6px -6px 12px var(--neu-shadow-light);
-      color: white;
-    }
-
-    .neu-card {
-      background: var(--neu-surface);
-      box-shadow: 10px 10px 20px var(--neu-shadow-dark), -10px -10px 20px var(--neu-shadow-light);
-      border-radius: var(--neu-border-radius-lg);
-      padding: 24px;
-      transition: var(--neu-transition);
-    }
-
-    .neu-card-inset {
-      background: var(--neu-bg);
-      box-shadow: inset 6px 6px 12px var(--neu-shadow-dark), inset -6px -6px 12px var(--neu-shadow-light);
-      border-radius: var(--neu-border-radius-lg);
-      padding: 24px;
-    }
-
-    [data-theme="neu-dark"] {
-      --neu-bg: #2d3748;
-      --neu-surface: #1a202c;
-      --neu-shadow-dark: #1a1a1a;
-      --neu-shadow-light: #3a4656;
-      --neu-text-primary: #e2e8f0;
-      --neu-text-secondary: #a0aec0;
-    }
-
-    [data-theme="warm-cream"] {
-      --neu-bg: #f5f5dc;
-      --neu-surface: #fffef0;
-      --neu-shadow-dark: #e0dfc8;
-      --neu-shadow-light: #ffffff;
-    }
-
-    [data-theme="cool-blue"] {
-      --neu-bg: #e3f2fd;
-      --neu-surface: #f5fbff;
-      --neu-shadow-dark: #c5e1f5;
-      --neu-shadow-light: #ffffff;
-    }
-
-    [data-theme="mint-fresh"] {
-      --neu-bg: #e0f2f1;
-      --neu-surface: #f0fffe;
-      --neu-shadow-dark: #c2dedd;
-      --neu-shadow-light: #ffffff;
-    }
-
-    [data-theme="rose-gold"] {
-      --neu-bg: #ffe4e1;
-      --neu-surface: #fff9f8;
-      --neu-shadow-dark: #e8d0cd;
-      --neu-shadow-light: #ffffff;
-    }
-
-    [data-theme="arctic-white"] {
-      --neu-bg: #ffffff;
-      --neu-surface: #ffffff;
-      --neu-shadow-dark: #e0e0e0;
-      --neu-shadow-light: #ffffff;
-    }
-
-    [data-theme="midnight-pro"] {
-      --neu-bg: #1a202c;
-      --neu-surface: #2d3748;
-      --neu-shadow-dark: #0d1117;
-      --neu-shadow-light: #3a4656;
-      --neu-text-primary: #e2e8f0;
-      --neu-text-secondary: #a0aec0;
-    }
-
+    body { font-family: 'Inter', sans-serif; background-color: #000; margin: 0; overflow-x: hidden; }
+    
+    /* Image 1 inspired: Animated Golden Flow */
     .golden-bg {
       background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
       position: relative;
       overflow: hidden;
     }
-
+    
     .sparkle-stream {
       position: absolute;
       bottom: -150px;
@@ -189,62 +33,57 @@
       100% { transform: translateY(-130vh) scaleY(2); opacity: 0; }
     }
 
+    /* Image 2 inspired: 3D Golden Neumorphic Card */
+    .neumorphic-3d-gold {
+      background: #1a1a1a;
+      border-radius: 40px;
+      box-shadow: 
+        20px 20px 60px #080808,
+        -10px -10px 40px #2a2a2a,
+        inset 1px 1px 2px rgba(212,175,55,0.2);
+      border: 1px solid rgba(212, 175, 55, 0.1);
+    }
+
+    .neumorphic-input-gold {
+      background: #141414;
+      border-radius: 15px;
+      box-shadow: inset 4px 4px 8px #080808, inset -2px -2px 6px #222;
+      border: 1px solid rgba(212, 175, 55, 0.05);
+      color: #d4af37;
+    }
+
+    .neumorphic-button-gold {
+      background: linear-gradient(145deg, #1e1e1e, #111);
+      border-radius: 15px;
+      box-shadow: 6px 6px 12px #080808, -4px -4px 10px #222;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      color: #d4af37;
+      border: 1px solid rgba(212, 175, 55, 0.2);
+    }
+
+    .neumorphic-button-gold:active {
+      box-shadow: inset 4px 4px 8px #080808, inset -2px -2px 6px #222;
+      transform: scale(0.96);
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.4s ease;
+    }
+    
+    .feature-card:hover {
+      background: rgba(212, 175, 55, 0.05);
+      border-color: rgba(212, 175, 55, 0.3);
+      transform: translateY(-5px);
+    }
+
     .gold-gradient-text {
       background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-
-    .glass {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .scrollbar-hide::-webkit-scrollbar {
-      display: none;
-    }
-
-    .scrollbar-hide {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-
-    @keyframes fade-in {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes slide-in-from-right {
-      from { transform: translateX(100%); }
-      to { transform: translateX(0); }
-    }
-
-    @keyframes zoom-in {
-      from { transform: scale(0.95); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-
-    .animate-in {
-      animation-duration: 0.5s;
-      animation-fill-mode: both;
-    }
-
-    .fade-in {
-      animation-name: fade-in;
-    }
-
-    .slide-in-from-right-10 {
-      animation-name: slide-in-from-right;
-    }
-
-    .zoom-in-95 {
-      animation-name: zoom-in;
-    }
-
-    .duration-300 { animation-duration: 0.3s; }
-    .duration-500 { animation-duration: 0.5s; }
-    .duration-700 { animation-duration: 0.7s; }
   </style>
 <script type="importmap">
 {
